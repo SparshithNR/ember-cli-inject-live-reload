@@ -28,8 +28,11 @@ module.exports = {
     return `(function() {${liveReloadOptions ? "\n  window.LiveReloadOptions = " + JSON.stringify(liveReloadOptions) + ";" : ''}
   var srcUrl = ${options.liveReloadJsUrl ? "'" + options.liveReloadJsUrl + "'" : null};
   var host= location.hostname || 'localhost';
-  var prefixURL = '${liveReloadPort? "(location.protocol || 'http:') + '//' + host + ':' + " + liveReloadPort : ''}';
-  var src = srcUrl || prefixURL + '${liveReloadPath + 'livereload.js'}';
+  var liveReloadPort = ${liveReloadPort};
+  var defaultPort = location.protocol === 'https:' ? 443 : 80;
+  port = liveReloadPort || location.port || defaultPort;
+  var prefixURL = '${liveReloadPort ? "(location.protocol || 'http:') + '//' + host + ':' + " + liveReloadPort : ''}';
+  var src = srcUrl || prefixURL + '${liveReloadPath + 'livereload.js?port='}' + port;
   var script    = document.createElement('script');
   script.type   = 'text/javascript';
   script.src    = src;
